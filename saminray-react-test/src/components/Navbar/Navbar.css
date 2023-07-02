@@ -1,0 +1,30 @@
+.navbar {
+    background-color: #FFF;
+    justify-content: flex-start;
+    padding: 1rem 1rem;
+}
+.navbar-brand {
+    color: #8AAAE5;
+    font-weight: bolder;
+    cursor: pointer;
+}
+.nav-menu {
+    list-style-type: none;
+    display: flex;
+    margin-bottom: 0;
+    margin-left: 2rem;
+}
+.nav-link {
+    color: #000;
+    padding: 0.5rem;
+    transition: 0.3s;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+}
+.nav-link:hover {
+    color: #FFF;
+    background-color: #8AAAE5;
+}
+hr {
+    background-color: #eee;
+}

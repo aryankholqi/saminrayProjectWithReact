@@ -1,0 +1,23 @@
+.error404-page {
+    background-color: #04012C;
+    height: 100vh;
+}
+.container {
+    height: 100vh;
+}
+.error404-title {
+    color: #eee;
+    line-height: 3rem;
+}
+.error404-link {
+    color: #eee;
+    background-color: #7F75F1;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    transition: 0.4s;
+}
+.error404-link:hover {
+    opacity: 0.8;
+    text-decoration: none;
+    color: #eee;
+}

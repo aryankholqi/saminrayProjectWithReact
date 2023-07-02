@@ -1,0 +1,20 @@
+.main-user-page {
+    height: 100vh;
+    background-color: #FFF;
+}
+.main-user-page-title {
+    color: #8AAAE5
+}
+.edit-form-btn {
+    transition: 0.3s;
+}
+.edit-form-btn:hover {
+    background-color: #8AAAE5;
+    color: #fff;
+}
+.edit-user-message {
+    background-color: #7F75F1;
+}
+.label-edit-page-inputs {
+    color: #000;
+}

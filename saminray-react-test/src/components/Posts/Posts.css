@@ -1,0 +1,14 @@
+.posts-page {
+    height: 100vh;
+    background-color: #FFF;
+}
+.posts-page-title {
+    color: #8AAAE5;
+}
+.create-post-btn {
+    transition: 0.3s;
+}
+.create-post-btn:hover {
+    background-color: #8AAAE5;
+    color: #FFF;
+}
