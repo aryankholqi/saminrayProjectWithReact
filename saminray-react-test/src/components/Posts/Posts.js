@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import { useForm } from 'react-hook-form'
 import "./Posts.css"
-import axios from 'axios'
+import fetchPosts from '../../api/postsApi/postsApi'
 import Swal from 'sweetalert2'
 
 export default function Posts() {
@@ -14,22 +14,10 @@ export default function Posts() {
     })
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
-    const [submited, setSubmited] = useState(false)
     const Swal = require('sweetalert2')
     function submitFormHandler() {
-        axios({
-            url: "https://jsonplaceholder.typicode.com/posts",
-            method: "POST",
-            data: {
-                title: title,
-                body: description,
-            },
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
+        fetchPosts(title, description)
             .then(res => {
-                setSubmited(true)
                 setTitle("")
                 setDescription("")
                 Swal.fire({

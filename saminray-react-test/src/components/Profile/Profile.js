@@ -13,7 +13,7 @@ export default function Profile() {
                 <div className='container'>
                     <h2 className='profile-page-title text-center pt-5'>Profile</h2>
                     <div className='profile-detail text-center mt-5'>
-                        <div class="profile-circle">
+                        <div className="profile-circle">
                             <img src="./images/Profile/user.jpg" alt="logo" className='profile-img' />
                         </div>
                         <h3 className='text-dark'>Username: <span className='profile-username'>{username}</span></h3>

@@ -1,11 +1,9 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import "./Home.css"
 import Navbar from '../Navbar/Navbar'
-import { useSelector } from "react-redux"
-import axios from 'axios'
+import fetchHome from '../../api/homeApi/homeApi'
 
 export default function Home() {
-  const username = useSelector(state => state.userName)
   const [loaded, setLoaded] = useState(false)
   const [counter, setCounter] = useState(0)
   const [productsImages, setProductsImages] = useState([
@@ -13,15 +11,7 @@ export default function Home() {
   ])
   const [posts, setPosts] = useState()
   useEffect(() => {
-    axios({
-      url: "https://jsonplaceholder.typicode.com/posts",
-      method: "GET",
-    }).then(res => {
-      setPosts(res.data.slice(0, 4))
-      setLoaded(true)
-    }).catch(err => {
-      console.log(err.message)
-    })
+    fetchHome(setPosts, setLoaded)
   }, [])
   function prevProduct() {
     if (counter === 0) {
@@ -51,7 +41,7 @@ export default function Home() {
         })
       }
     }, 5000)
-    return ()=>clearInterval(productInterval)
+    return () => clearInterval(productInterval)
   }, [counter])
 
   return (
@@ -60,17 +50,16 @@ export default function Home() {
         <Fragment>
           <Navbar />
           <div className='home-page pt-5 text-center'>
-            <h2 className='home-page-title'>Welcome <span>{username}</span></h2>
             <div className='slider mt-5'>
               <div className='product'>
-                <div className='mx-auto d-flex align-items-center justify-content-center'>
+                <div className='mx-auto d-flex justify-content-center align-items-center'>
                   <i className="bi bi-caret-left-fill product-left-btn" onClick={prevProduct}></i>
                   <div className='product-img'>
                     <img src={productsImages[counter]} alt="logo" className='product-img-img' />
                   </div>
                   <i className="bi bi-caret-right-fill product-right-btn" onClick={nextProduct}></i>
                 </div>
-                <h3 className='product-title mt-4 text-white mx-auto'>{posts[counter].title}</h3>
+                <h3 className='product-title mt-4 mx-auto'>{posts[counter].title}</h3>
               </div>
             </div>
           </div>

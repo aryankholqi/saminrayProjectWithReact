@@ -1,55 +1,42 @@
 import React, { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import "./Login.css"
-import axios from 'axios'
-import { useDispatch } from "react-redux"
-import { logIn } from '../../actions'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom"
-import loginApi from '../../api/loginApi/loginApi'
+import fetchLogin from '../../api/loginApi/loginApi'
 import Swal from 'sweetalert2'
+import { logIn } from "../../actions"
 
 export default function Login() {
+    const Swal = require('sweetalert2')
     const [userName, setUsername] = useState("")
     const [passWord, setPassword] = useState("")
-    const [error, setError] = useState()
-    const [errorMessage, setErrorMessage] = useState(false)
     const { register, handleSubmit } = useForm({
         defaultValues: {
             username: "",
             password: "",
         }
     })
-    const Swal = require('sweetalert2')
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const submitFormHandler = () => {
-        async function getResponse() {
-            await axios({
-                url: loginApi.apiAddress,
-                method: "POST",
-                data: {
-                    username: userName,
-                    password: passWord,
+        fetchLogin(userName,passWord)
+            .then((res) => {
+                dispatch(logIn(userName, passWord, res.data.token))
+                navigate("/home")
+            })
+            .catch((err) => {
+                if (err.response.status === 401) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Your Inputs are not valid',
+                        icon: 'error',
+                        confirmButtonText: 'Close'
+                    })
                 }
             })
-                .then((res) => {
-                    dispatch(logIn(userName, passWord, res.data.token))
-                    navigate("/home")
-                })
-                .catch((err) => {
-                    if (err.response.status === 401) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Your Inputs are not valid',
-                            icon: 'error',
-                            confirmButtonText: 'Close'
-                        })
-                    }
-                })
-            setUsername("")
-            setPassword("")
-        }
-        getResponse()
+        setUsername("")
+        setPassword("")
     }
     return (
         <Fragment>
