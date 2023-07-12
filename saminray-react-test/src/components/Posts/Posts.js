@@ -2,8 +2,7 @@ import React, { Fragment, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import { useForm } from 'react-hook-form'
 import "./Posts.css"
-import fetchPosts from '../../api/postsApi/postsApi'
-import Swal from 'sweetalert2'
+import { usePostMutation } from '../../Queries/usePostQuery'
 
 export default function Posts() {
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -14,27 +13,14 @@ export default function Posts() {
     })
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
-    const Swal = require('sweetalert2')
-    function submitFormHandler() {
-        fetchPosts(title, description)
-            .then(res => {
-                setTitle("")
-                setDescription("")
-                Swal.fire({
-                    title: 'Successful',
-                    text: 'Your Post has been completely posted',
-                    icon: 'success',
-                    confirmButtonText: 'Close',
-                })
-            })
-    }
+    const post = usePostMutation(setTitle,setDescription)
     return (
         <Fragment>
             <Navbar />
             <div className='posts-page d-flex flex-column'>
                 <div className='container'>
                     <h2 className='posts-page-title text-center py-5'>Create a New Post:</h2>
-                    <form className='row' onSubmit={handleSubmit(submitFormHandler)}>
+                    <form className='row' onSubmit={handleSubmit(()=>post.mutate(title,description))}>
                         <div className='col-md-6 offset-md-3'>
                             <div className='mb-5'>
                                 <label htmlFor="title" className='text-dark'>Title:</label><br />

@@ -1,12 +1,11 @@
 import axios from "axios";
 
-function fetchHome(setPosts,setLoaded) {
-    axios({
+function fetchHome() {
+    return axios({
         url: "https://jsonplaceholder.typicode.com/posts",
         method: "GET",
     }).then(res => {
-        setPosts(res.data.slice(0, 4))
-        setLoaded(true)
+        return res.data.slice(0,4)
     }).catch(err => {
         console.log(err.message)
     })

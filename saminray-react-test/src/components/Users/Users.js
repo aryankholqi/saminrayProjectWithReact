@@ -1,18 +1,17 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import "./Users.css"
 import Navbar from '../Navbar/Navbar'
-import { fetchGetUsers, fetchDeleteUsers } from '../../api/usersApi/usersApi'
 import { getUserID } from '../../actions'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import DataTable from 'react-data-table-component'
-import Swal from 'sweetalert2'
+import { useUsersQuery, useUsersMutation } from '../../Queries/useUsersQuery'
 
 export default function Users() {
-    const [users, setUsers] = useState()
-    const [loaded, setLoaded] = useState(false)
+    const users = useUsersQuery()
+    const deleteUserMutation = useUsersMutation()
     const columns = [
         {
             name: "Name",
@@ -36,7 +35,7 @@ export default function Users() {
         },
 
     ]
-    const data = users ? users.map((user) => ({
+    const data = users.data ? users.data.map((user) => ({
         name: user.name,
         username: user.username,
         email: user.email,
@@ -44,13 +43,10 @@ export default function Users() {
         action: (
             <>
                 <i className="bi bi-pencil user-edit-btn ml-4" onClick={() => goToEditPage(user.id)}></i>
-                <i className="bi bi-trash user-delete-btn ml-3" onClick={() => removeUserHandler(user.id)}></i>
+                <i className="bi bi-trash user-delete-btn ml-3" onClick={() => deleteUserMutation.mutate(user.id)}></i>
             </>
         )
     })) : []
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-
     const customStyle = {
         rows: {
             style: {
@@ -58,35 +54,16 @@ export default function Users() {
             }
         }
     }
-    const Swal = require('sweetalert2')
-    useEffect(() => {
-        fetchGetUsers()
-            .then((res) => {
-                setUsers(res.data)
-                setLoaded(true)
-            })
-
-    }, [])
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     function goToEditPage(id) {
         dispatch(getUserID(id))
         navigate(`${id}`)
     }
-    function removeUserHandler(id) {
-        fetchDeleteUsers()
-            .then(res => {
-                Swal.fire({
-                    title: 'Successful!',
-                    text: 'The specified user has been removed',
-                    icon: 'info',
-                    confirmButtonText: 'Close'
-                })
-            })
-    }
     return (
         <Fragment>
             {
-                loaded ? (
+                users.data ? (
                     <Fragment>
                         <Navbar />
                         <div className='users-page'>

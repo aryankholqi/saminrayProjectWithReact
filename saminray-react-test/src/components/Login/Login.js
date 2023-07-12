@@ -1,14 +1,9 @@
 import React, { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import "./Login.css"
-import { useDispatch } from 'react-redux'
-import { useNavigate } from "react-router-dom"
-import fetchLogin from '../../api/loginApi/loginApi'
-import Swal from 'sweetalert2'
-import { logIn } from "../../actions"
+import useLoginMutation from '../../Queries/useLoginMutation'
 
 export default function Login() {
-    const Swal = require('sweetalert2')
     const [userName, setUsername] = useState("")
     const [passWord, setPassword] = useState("")
     const { register, handleSubmit } = useForm({
@@ -17,33 +12,13 @@ export default function Login() {
             password: "",
         }
     })
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const submitFormHandler = () => {
-        fetchLogin(userName,passWord)
-            .then((res) => {
-                dispatch(logIn(userName, passWord, res.data.token))
-                navigate("/home")
-            })
-            .catch((err) => {
-                if (err.response.status === 401) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Your Inputs are not valid',
-                        icon: 'error',
-                        confirmButtonText: 'Close'
-                    })
-                }
-            })
-        setUsername("")
-        setPassword("")
-    }
+    const loginMutation = useLoginMutation(userName,passWord,setUsername,setPassword)
     return (
         <Fragment>
             <div className='login-page d-flex justify-content-center align-items-center flex-column'>
                 <div className='login justify-self-center'>
                     <h1 className='login-page-title'>Login Page</h1>
-                    <form className='login-form p-5 rounded' onSubmit={handleSubmit(submitFormHandler)}>
+                    <form className='login-form p-5 rounded' onSubmit={handleSubmit(()=>loginMutation.mutate())}>
                         <div className='row'>
                             <div className='col-12'>
                                 <div>
